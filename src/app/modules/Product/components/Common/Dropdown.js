@@ -50,7 +50,7 @@ function Dropdown(props) {
 }
 
 Dropdown.propTypes = {
-  values: PropTypes.object,
+  values: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.string,
   whatSoever: PropTypes.bool,
@@ -69,10 +69,10 @@ Dropdown.defaultProps = {
   touched: {},
   errors: {},
   setDropDown: [
-    { id: 1, value: "ming01" },
-    { id: 2, value: "khunmiw" },
+    { id: 1, name: "ming01" },
+    { id: 2, name: "khunmiw" },
   ],
-  dropDownValue: "value",
+  dropDownValue: "name",
   dropDownId: "id",
 };
 

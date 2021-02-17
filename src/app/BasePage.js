@@ -20,6 +20,8 @@ import ProductGroup from "./modules/Product/pages/ProductGroup";
 import ProductGroupList from "./modules/Product/pages/ProductGroupList";
 import ProductList from "./modules/Product/pages/ProductList";
 import Stock from "./modules/Product/pages/stock/Stock";
+import StockList from "./modules/Product/pages/stock/StockList";
+import TestP from "./modules/Product/pages/TestP";
 
 export default function BasePage(props) {
   // useEffect(() => {
@@ -64,12 +66,15 @@ export default function BasePage(props) {
         <ContentRoute exact path="/ProductList/" component={ProductList} />
         <ContentRoute exact path="/product/edit/:id" component={Product} />
         <ContentRoute exact path="/stock/" component={Stock} />
+        <ContentRoute exact path="/stocklist/" component={StockList} />
+        <ContentRoute exact path="/TestP/" component={TestP} />
         <PrivateRoute
           exact
           path="/test"
           roles={[ROLES.admin, ROLES.developer]}
           component={Test}
         />
+
         {/* End Demo part สามารถ comment ได้ */}
 
         <Route path="/errorUnAuthorized" component={ErrorUnAuthorized} />

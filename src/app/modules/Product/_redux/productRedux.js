@@ -12,6 +12,7 @@ export const actionTypes = {
   RESET_PRODUCTGROUP: "[RESET_PRODUCTGROUP] Action",
   UPDATE_CURRENT_PRODUCT: "[UPDATE_CURRENT_PRODUCT] Action",
   RESET_PRODUCT: "[RESET_PRODUCT] Action",
+  SEARCH_STOCK: "[SEARCH_STOCK] Action",
 };
 
 // state ค่าที่ถูกเก็บไว้
@@ -81,6 +82,34 @@ export const productreducer = (state = initialProdutState, action) => {
   }
 };
 
+// state ค่าที่ถูกเก็บไว้
+const initialStockState = {
+  currentPage: 0,
+  currentStockToAdd: {
+    name: "",
+  },
+  searchValues: { name: "", isactive: true },
+};
+
+// reducer แต่ละ Action จะไป update State อย่างไร
+export const stockreducer = (state = initialStockState, action) => {
+  switch (action.type) {
+    case actionTypes.SEARCH_STOCK: {
+      return { ...state, searchValues: action.payload };
+    }
+    case actionTypes.RESET_STOCK: {
+      return {
+        ...state,
+        currentStockToAdd: initialStockState.currentStockToAdd,
+        currentPage: 0,
+      };
+    }
+
+    default:
+      return state;
+  }
+};
+
 //action เอาไว้เรียกจากข้างนอก เพื่อเปลี่ยน state
 export const actions = {
   saveProdutGroup: (payload) => ({
@@ -98,4 +127,11 @@ export const actions = {
     payload,
   }),
   resetProduct: () => ({ type: actionTypes.RESET_PRODUCT }),
+
+  searchStock: (payload) => ({
+    type: actionTypes.SEARCH_STOCK,
+    payload,
+  }),
+
+  resetStock: () => ({ type: actionTypes.RESET_PRODUCT }),
 };

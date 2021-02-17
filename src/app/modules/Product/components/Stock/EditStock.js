@@ -5,9 +5,10 @@ import { TextField } from "formik-material-ui";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-
 import Dropdown from "../Common/Dropdown";
 import * as productAxios from "../../_redux/productAxios";
+import * as swal from "../../../Common/components/SweetAlert";
+
 function EditStock(props) {
   const [dropdowngroup, setDropDownGroup] = React.useState([]);
   const [dropdownproduct, setDropDownProduct] = React.useState([]); //ลองก็แบบ paginated
@@ -15,6 +16,14 @@ function EditStock(props) {
     []
   );
 
+  const [payLoad, setPayLoad] = React.useState({
+    remark: "",
+    qty: 0,
+    stock: 0,
+    isActive: true,
+    productId: 0,
+    stockCardType: 0,
+  });
   //const [test, setTest] = React.useState([{ id: 0, name: "" }]);
   React.useEffect(() => {
     loaddropdowngroup();
@@ -61,9 +70,52 @@ function EditStock(props) {
 
   const handleChanges = ({ setFieldValue }, e, values) => {
     let qty =
-      e.target.value !== "" ? parseInt(e.target.value) + values.currentQty : 0;
+      e.target.value !== ""
+        ? values.stockCardTypeId === 6
+          ? values.currentQty - parseInt(e.target.value)
+          : parseInt(e.target.value) + values.currentQty
+        : 0;
 
     setFieldValue("alterQty", qty);
+  };
+
+  const handleAdd = ({ setSubmitting, values }) => {
+    let objPayload = {
+      ...payLoad,
+      remark: values.remark,
+      qty: values.qty,
+      stock: values.alterQty,
+      isActive: true,
+      productId: values.productId,
+      stockCardType: values.stockCardTypeId,
+    };
+    debugger;
+    productAxios
+      .addStock(objPayload)
+      .then((res) => {
+        if (res.data.isSuccess) {
+          //Success
+          debugger;
+          swal
+            .swalSuccess("Add Completed", `Add id: ${res.data.data.id}`)
+            .then(() => {
+              debugger;
+
+              props.history.push("/stocklist/");
+            });
+        } else {
+          //internal error
+          // alert(res.data.message)
+          swal.swalError("Error", res.data.message);
+        }
+      })
+      .catch((err) => {
+        //error network
+        swal.swalError("Error", err.message);
+      })
+      .finally(() => {
+        setSubmitting(false);
+      });
   };
 
   const loaddropdownproduct = (values) => {
@@ -113,9 +165,10 @@ function EditStock(props) {
           //Form fields and default values
           enableReinitialize
           initialValues={{
+            remark: "",
             productGroupId: "",
             productId: "",
-            isActive: "",
+            isActive: true,
             stockCardTypeId: "",
             qty: 0,
             currentQty: 20,
@@ -147,7 +200,11 @@ function EditStock(props) {
           onSubmit={(values, { setSubmitting }) => {
             setSubmitting(false);
             console.log(JSON.stringify(values));
-
+            swal.swalConfirm("Confirm save?", "Confirm Add?").then((result) => {
+              if (result.isConfirmed) {
+                handleAdd({ setSubmitting, values });
+              }
+            });
             //  props.submit(values);
           }}
         >
@@ -162,19 +219,19 @@ function EditStock(props) {
           }) => (
             <Form>
               <Grid container spacing={3}>
-                <Grid item xs={12} lg={6}>
-                  <Dropdown
-                    values={values.productGroupId}
-                    name="productGroupId"
-                    label="productGroup"
-                    setFieldValue={setFieldValue}
-                    errors={errors}
-                    touched={touched}
-                    setDropDown={dropdowngroup}
-                    dropDownValue="name"
-                    dropDownId="id"
-                  ></Dropdown>
-                </Grid>
+                {
+                  <Grid item xs={12} lg={6}>
+                    <Dropdown
+                      values={values.productGroupId}
+                      name="productGroupId"
+                      label="productGroup"
+                      setFieldValue={setFieldValue}
+                      errors={errors}
+                      touched={touched}
+                      setDropDown={dropdowngroup}
+                    ></Dropdown>
+                  </Grid>
+                }
                 <Grid item xs={12} lg={6}>
                   <Dropdown
                     values={values.productId}
@@ -201,6 +258,7 @@ function EditStock(props) {
                     dropDownId="id"
                   ></Dropdown>
                 </Grid>
+
                 <Grid item xs={12} lg={6}>
                   <Field
                     fullWidth
@@ -217,6 +275,7 @@ function EditStock(props) {
                 </Grid>
                 <Grid item xs={12} lg={6}>
                   <Field
+                    disabled
                     fullWidth
                     component={TextField}
                     required
@@ -227,12 +286,23 @@ function EditStock(props) {
                 </Grid>
                 <Grid item xs={12} lg={6}>
                   <Field
+                    disabled
                     fullWidth
                     component={TextField}
                     required
                     type="number"
                     label="AlterQty"
                     name="alterQty"
+                  />
+                </Grid>
+                <Grid item xs={12} lg={12}>
+                  <Field
+                    fullWidth
+                    component={TextField}
+                    required
+                    type="text"
+                    label="Remark"
+                    name="remark"
                   />
                 </Grid>
 

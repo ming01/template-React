@@ -91,3 +91,28 @@ const STOCK_URL = `${CONST.LOCAL_URL}/Stock`;
 export const getStockCardType = () => {
   return axios.get(`${STOCK_URL}/stockcardtype`);
 };
+
+export const addStock = (payload) => {
+  return axios.post(`${STOCK_URL}/addstockcard`, payload);
+};
+
+export const getStockFilter = (
+  orderingField,
+  ascendingOrder,
+  page,
+  recordsPerPage,
+  Name,
+  IsActive
+) => {
+  let payload = {
+    page,
+    recordsPerPage,
+    orderingField,
+    ascendingOrder,
+    Name,
+    IsActive,
+  };
+  return axios.get(
+    encodeURLWithParams(`${STOCK_URL}/stockcard/filter`, payload)
+  );
+};

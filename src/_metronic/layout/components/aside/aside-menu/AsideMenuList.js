@@ -104,19 +104,34 @@ export function AsideMenuList({ layoutProps }) {
           </NavLink>
         </li>
         {/*End::1 ProductList*/}
+
         {/*begin::1 ProductList*/}
         <li
-          className={`menu-item ${getMenuItemActive("/stock/", false)}`}
+          className={`menu-item ${getMenuItemActive("/stocklist/", false)}`}
           aria-haspopup="true"
         >
-          <NavLink className="menu-link" to="/stock/">
+          <NavLink className="menu-link" to="/stocklist/">
             <span className="svg-icon menu-icon">
               <DesktopMacIcon></DesktopMacIcon>
             </span>
-            <span className="menu-text">Edit Stock</span>
+            <span className="menu-text">StockList</span>
           </NavLink>
         </li>
         {/*End::1 ProductList*/}
+
+        {/*begin::1 TestP*/}
+        <li
+          className={`menu-item ${getMenuItemActive("/TestP/", false)}`}
+          aria-haspopup="true"
+        >
+          <NavLink className="menu-link" to="/TestP/">
+            <span className="svg-icon menu-icon">
+              <DesktopMacIcon></DesktopMacIcon>
+            </span>
+            <span className="menu-text">TestP</span>
+          </NavLink>
+        </li>
+        {/*End::1 TestP*/}
       </ul>
       {/* end::Menu Nav */}
     </Hoc>

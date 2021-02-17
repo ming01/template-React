@@ -11,4 +11,5 @@ export const rootReducer = combineReducers({
   employee: employee.reducer,
   productgroup: product.productgroupreducer,
   product: product.productreducer,
+  stock: product.stockreducer,
 });
